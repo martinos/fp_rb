@@ -1,5 +1,6 @@
 require "fp_rb/version"
 
-module FpRb
-  # Your code goes here...
-end
+require 'fp_rb/operator'
+require 'fp_rb/maybe'
+require 'fp_rb/result'
+

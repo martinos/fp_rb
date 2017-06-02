@@ -2,6 +2,8 @@ require 'test_helper'
 require 'fp_rb/result'
 
 class ResultTest < Minitest::Test
+  include FpRb
+
   describe "with_default" do
     it "return the value if success" do
       Result.ok(11).with_default(0).must_equal(11)
