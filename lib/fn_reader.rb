@@ -1,12 +1,11 @@
-require "fp_rb/version"
-
 class Module
-  # stolen from Rails mattr_accessor
+  # Stripped down version of ActiveSupport's mattr_reader (don't want Rails dependencies)
   def fn_reader(*syms)
     syms.each do |sym|
-      raise StandardError.new("invalid attribute name: #{sym}") unless (sym =~ /\A[_A-Za-z]\w*\z/)
+      raise StandardError.new("invalid attribute name: #{sym}") unless /\A[_A-Za-z]\w*\z/.match
       class_eval(<<-EOS, __FILE__, __LINE__ + 1)
         @@#{sym} = nil unless defined? @@#{sym}
+
         def self.#{sym}
           @@#{sym}
         end
@@ -17,13 +16,9 @@ class Module
             @@#{sym}
           end
         EOS
+
+      sym_default_value = default
+      class_variable_set("@@#{sym}", sym_default_value) unless sym_default_value.nil?
     end
   end
-end
-
-module FpRb
-  fn_reader :and_then
-
-  @@and_then = -> f, a { a.and_then(f) }.curry
-  @@map = -> f, a { a.map(f) }.curry
 end
